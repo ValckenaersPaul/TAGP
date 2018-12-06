@@ -21,5 +21,12 @@ loop() ->
 			loop();
 		{locations_list, State, ReplyFn} -> 
 			#{chambers := L_List} = State, ReplyFn(L_List),
+			loop();
+		{flow_influence, _State, ReplyFn} -> 
+			FlowInfluenceFn = fun(Flow) -> flow(Flow) end, % placeholder only. 
+			ReplyFn(FlowInfluenceFn), 
 			loop()
 	end. 
+
+
+flow(N) -> - 0.01 * N. 
