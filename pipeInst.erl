@@ -1,5 +1,5 @@
 -module(pipeInst).
--export([create/2, init/2, flow_influence/1]).
+-export([create/2, init/2, get_flow_influence/1]).
 
 
 create(Host, ResTyp_Pid) -> {ok, spawn(?MODULE, init, [Host, ResTyp_Pid])}.
@@ -10,7 +10,7 @@ init(Host, ResTyp_Pid) ->
 	survivor:entry({ pipeInst_created, State }),
 	loop(Host, State, ResTyp_Pid).
 
-flow_influence(PipeInst_Pid) -> 
+get_flow_influence(PipeInst_Pid) -> 
 	msg:get(PipeInst_Pid, get_flow_influence).
 
 loop(Host, State, ResTyp_Pid) -> 

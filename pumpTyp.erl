@@ -4,7 +4,7 @@
 % -export([get_initial_state/3, get_connections_list/2]). % use resource_type
 % -export([update/3, execute/7, refresh/4, cancel/4, update/7, available_ops/2]). 
 
-create() -> spawn(?MODULE, init, []).
+create() -> {ok, spawn(?MODULE, init, [])}.
 
 init() -> 
 	survivor:entry(pumpTyp_created),
@@ -14,7 +14,7 @@ loop() ->
 	receive
 
 %    get_initial_state, self(),     ]
-		{initial_state, ResInst_Pid, [PipeInst_Pid, RealWorldCmdFn], ReplyFn} ->
+		{initial_state, [ResInst_Pid, [PipeInst_Pid, RealWorldCmdFn]], ReplyFn} ->
 			ReplyFn(#{resInst => ResInst_Pid, pipeInst => PipeInst_Pid, 
 					  rw_cmd => RealWorldCmdFn, on_or_off => off}), 
 			loop();
@@ -26,7 +26,7 @@ loop() ->
 			#{rw_cmd := ExecFn} = State, ExecFn(on), 
 			ReplyFn(State#{on_or_off := on}),
 			loop(); 
-		{on_or_off, State, ReplyFn} -> 
+		{isOn, State, ReplyFn} -> 
 			#{on_or_off := OnOrOff} = State, 
 			ReplyFn(OnOrOff),
 			loop();

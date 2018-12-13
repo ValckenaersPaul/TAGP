@@ -1,11 +1,14 @@
 -module(pipeTyp).
--export([create/0, init/0]). % More to be added later. 
+-export([create/0, init/0, get_flow_influence/2]). % More to be added later. 
 
 create() -> {ok, spawn(?MODULE, init, [])}.
 
 init() -> 
 	survivor:entry(pipeTyp_created),
 	loop().
+
+get_flow_influence(TypePid, State) -> 
+	msg:get(TypePid, flow_influence, State).
 
 loop() -> 
 	receive

@@ -35,7 +35,7 @@ loop(ResInst_Pid, LocationTyp_Pid, Visitor_Pid) ->
 			ReplyFn(Visitor_Pid),
 			loop(ResInst_Pid, LocationTyp_Pid, Visitor_Pid);
 		{get_Type, ReplyFn} -> 
-			ReplyFn({LocationTyp_Pid}),
+			ReplyFn(LocationTyp_Pid),
 			loop(ResInst_Pid, LocationTyp_Pid, Visitor_Pid);
 		{arrived, V_Pid} ->
 			loop(ResInst_Pid, LocationTyp_Pid, V_Pid);

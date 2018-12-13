@@ -1,12 +1,16 @@
 -module(fluidumTyp).
 
 -export([create/0, init/0, discover_circuit/1]).
+-export([get_resource_circuit/2]).
 
 create() -> spawn(?MODULE, init, []).
 
 init() -> 
 	survivor:entry(fluidTyp_created), 
 	loop().
+
+get_resource_circuit(TypePid, State) ->
+	msg:get(TypePid, resource_circuit, State). 
 
 loop() -> 
 	receive
@@ -19,9 +23,19 @@ loop() ->
 			loop();
 		{locations_list, _State, ReplyFn} -> 
 			ReplyFn([]),
+			loop();
+		{resource_circuit, State, ReplyFn} -> 
+			#{circuit := C} = State, ReplyFn(extract(C)), 
 			loop()
 	end. 
 
+extract(C) -> extract(maps:next(maps:iterator(C)), #{}).
+
+extract({C, _ , Iter }, ResLoop) ->
+		{ok, ResPid} = connector:get_ResInst(C),
+		extract(maps:next(Iter), ResLoop#{ResPid => processed});
+
+extract( none , ResLoop) -> ResLoop. 
 
 discover_circuit(Root_Pid) -> 
 	{ok,  Circuit} = discover_circuit([Root_Pid], #{  }),
