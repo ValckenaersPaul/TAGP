@@ -13,7 +13,7 @@ init() ->
 loop() -> 
 	receive
 		{initial_state, [MeterInst_Pid, [ResInst_Pid, RealWorldCmdFn]], ReplyFn} ->
-			{ok, [L | _ ] } = resource_instance:get_locations_list(ResInst_Pid),
+			{ok, [L | _ ] } = resource_instance:list_locations(ResInst_Pid),
 			{ok, Fluidum} = location:get_Visitor(L),
 			ReplyFn(#{meterInst => MeterInst_Pid, resInst => ResInst_Pid, 
 					  fluidum => Fluidum, rw_cmd => RealWorldCmdFn}), 

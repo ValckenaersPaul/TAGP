@@ -25,7 +25,9 @@ loop() ->
 			ReplyFn([]),
 			loop();
 		{resource_circuit, State, ReplyFn} -> 
-			#{circuit := C} = State, ReplyFn(extract(C)), 
+			#{circuit := C} = State, 
+			{_RootC, CircuitMap} = C, 
+			ReplyFn(extract(CircuitMap)),
 			loop()
 	end. 
 
